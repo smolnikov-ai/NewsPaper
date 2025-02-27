@@ -1,0 +1,141 @@
+1. Создать двух пользователей (с помощью метода User.objects.create_user('username')).
+
+user_1 = User.objects.create_user('user_1')
+user_2 = User.objects.create_user('user_2')
+user_3 = User.objects.create_user('user_3')
+user_4 = User.objects.create_user('user_4')
+user_5 = User.objects.create_user('user_5')
+user_6 = User.objects.create_user('user_6')
+
+
+1.1 Присвоить в переменную уже имеющегося User
+
+user_1 = User.objects.get(pk=1)
+user_2 = User.objects.get(pk=2)
+user_3 = User.objects.get(pk=3)
+user_4 = User.objects.get(pk=4)
+user_5 = User.objects.get(pk=5)
+user_6 = User.objects.get(pk=6)
+
+2. Создать два объекта модели Author, связанные с пользователями.
+
+au1 = Author.objects.create(user=user_1)
+au2 = Author.objects.create(user=user_2)
+au3 = Author.objects.create(user=user_3)
+au4 = Author.objects.create(user=user_4)
+au5 = Author.objects.create(user=user_5)
+au6 = Author.objects.create(user=user_6)
+
+2.1 Присвоить в переменную уже имеющегося Author
+
+au1 = Author.objects.get(pk=1)
+au2 = Author.objects.get(pk=2)
+au3 = Author.objects.get(pk=3)
+au4 = Author.objects.get(pk=4)
+au5 = Author.objects.get(pk=5)
+au6 = Author.objects.get(pk=6)
+
+3. Добавить 4 категории в модель Category.
+
+cat_1 = Category.objects.create(name='Политика')
+cat_2 = Category.objects.create(name='Спорт')
+cat_3 = Category.objects.create(name='Погода')
+cat_4 = Category.objects.create(name='Музыка')
+cat_5 = Category.objects.create(name='Россия')
+cat_6 = Category.objects.create(name='Популярное')
+cat_7 = Category.objects.create(name='Знаменитости')
+
+3.1 Присвоить в переменную уже имеющеюся Category
+
+cat_1 = Category.objects.get(pk=1)
+cat_2 = Category.objects.get(pk=2)
+cat_3 = Category.objects.get(pk=3)
+cat_4 = Category.objects.get(pk=4)
+cat_5 = Category.objects.get(pk=5)
+cat_6 = Category.objects.get(pk=6)
+cat_7 = Category.objects.get(pk=7)
+
+4. Добавить 2 статьи и 1 новость.
+
+post_1 = Post.objects.create(author=au1, type='AR', title='Первая статья о политике первого автора',
+content='Текст первой статьи о политике первого автора. Так как эта новость подразумевается самой популярной,
+внесем в нее многа букав, для отображения многоточия в конце preview.')
+
+post_2 = Post.objects.create(author=au2, type='AR', title='Вторая статья о спорте',
+content='Текст второй статьи о спорте второго автора')
+
+post_3 = Post.objects.create(author=au1, type='NW', title='Третья новость о музыке',
+content='Текст третьей новости о музыке первого автора')
+
+post_4 = Post.objects.create(author=au3, type='NW', title='Четвертая популярная новость о знаменитостях третьего автора',
+content='Текст четвертой популярной новости о знаменитостях третьего автора.')
+
+4.1 Присвоить в переменную уже имеющейся Post
+
+post_1 = Post.objects.get(pk=1)
+post_2 = Post.objects.get(pk=2)
+post_3 = Post.objects.get(pk=3)
+post_4 = Post.objects.get(pk=4)
+post_5 = Post.objects.get(pk=5)
+
+5. Присвоить им категории (как минимум в одной статье/новости должно быть не меньше 2 категорий).
+
+post_1.categories.add(cat_1)
+post_1.categories.add(cat_5)
+post_1.categories.add(cat_6)
+post_2.categories.add(cat_2, cat_6, cat_7)
+post_3.categories.add(cat_7)
+post_4.categories.add(cat_6, cat_7)
+
+6. Создать как минимум 4 комментария к разным объектам модели Post (в каждом объекте должен быть как минимум один комментарий).
+
+com_1 = Comment.objects.create(post=post_1, user=user_3, content='Ещё не скоро - несколько месяцев встречу готовить будут')
+com_2 = Comment.objects.create(post=post_1, user=user_4, content='Трампу до Украины нет дела. У него внутренних проблем полно.')
+com_3 = Comment.objects.create(post=post_1, user=user_5, content='Трамп умывает руки. Пусть ЕС сами разбираются.')
+com_4 = Comment.objects.create(post=post_2, user=user_1, content='Заголовок - огонь.')
+com_5 = Comment.objects.create(post=post_2, user=user_4, content='Мирра ВПЕРЕД!!!')
+com_6 = Comment.objects.create(post=post_2, user=user_3, content='Я себе бэху взял на выигранные на ставках деньги.')
+com_7 = Comment.objects.create(post=post_3, user=user_5, content='Первый раз про неё услышал.')
+com_8 = Comment.objects.create(post=post_4, user=user_5, content='Комментарий к четвертой статье, для выполнени условий задания.')
+
+7. Применяя функции like() и dislike() к статьям/новостям и комментариям, скорректировать рейтинги этих объектов.
+
+post_1.like()
+post_1.dislike()
+post_2.like()
+post_2.dislike()
+post_3.like()
+post_3.dislike()
+post_4.like()
+post_4.dislike()
+
+com_1.like()
+com_1.dislike()
+com_3.like()
+com_3.dislike()
+com_5.like()
+com_5.dislike()
+
+8. Обновить рейтинги пользователей.
+
+Author.objects.get(pk=1).update_rating()
+Author.objects.get(pk=2).update_rating()
+Author.objects.get(pk=3).update_rating()
+Author.objects.get(pk=4).update_rating()
+Author.objects.get(pk=5).update_rating()
+Author.objects.get(pk=6).update_rating()
+
+9. Вывести username и рейтинг лучшего пользователя (применяя сортировку и возвращая поля первого объекта).
+
+Author.objects.order_by('-rating_author').values('user__username', 'rating_author').first()
+
+10. Вывести дату добавления, username автора, рейтинг, заголовок и превью лучшей статьи,
+основываясь на лайках/дислайках к этой статье.
+
+Post.objects.order_by('-rating_post').values('date_time_in__date', 'author__user__username', 'rating_post', 'title').first()
+Post.objects.order_by('-rating_post').first().preview()
+best_post = Post.objects.order_by('-rating_post').first()
+
+11. Вывести все комментарии (дата, пользователь, рейтинг, текст) к этой статье.
+
+best_post.comments.values('date_time_in__date', 'user', 'rating_comment', 'content').all()

@@ -1,6 +1,8 @@
 from django.db import models
 from django.db.models import Sum
 from django.contrib.auth.models import User
+from django.db.models.functions import Coalesce
+
 from .resources import POST_TYPES
 
 
@@ -13,15 +15,25 @@ class Author(models.Model):
     - triple total rating of all posts by the author
     - the total rating of all the author's comments
     - the total rating of all comments on the author's articles
+
+    It starts when a reaction (like/dislike, post/comment) is added
     """
 
     def update_rating(self):
-        sum_rating_post_author_3 = Post.objects.filter(author=self).aggregate(Sum('rating_post')) * 3
-        sum_rating_comment_author = Comment.objects.filter(user=self.user).aggregate(Sum('rating_comment'))
-        sum_rating_comment_post_author = Comment.objects.filter(post__author=self).aggregate(Sum('rating_comment'))
+        sum_rating_post_author_3 = Post.objects.filter(author=self). \
+                                       aggregate(rp=Coalesce(Sum('rating_post'), 0))['rp'] * 3
+        sum_rating_comment_author = Comment.objects.filter(user=self.user). \
+            aggregate(rca=Coalesce(Sum('rating_comment'), 0))['rca']
+        sum_rating_comment_post_author = Comment.objects.filter(post__author=self). \
+            aggregate(rcpa=Coalesce(Sum('rating_comment'), 0))['rcpa']
+        ## or
+        # sum_rating_post_author_3 = self.post__set.aggregate(rp=Coalesce(Sum('rating_post'), 0)).get('rp') * 3
+        # sum_rating_comment_author = self.user.comment__set.aggregate(rca=Coalesce(Sum('rating_comment'), 0)).get('rca')
+        # sum_rating_comment_post_author = self.post__set.aggregate(rcpa=Coalesce(Sum('comment__rating_comment'), 0)).get('rcpa')
 
         self.rating_author = sum_rating_post_author_3 + sum_rating_comment_author + sum_rating_comment_post_author
         self.save()
+
 
 class Category(models.Model):
     name = models.CharField(max_length=25, unique=True)
@@ -39,10 +51,14 @@ class Post(models.Model):
     def like(self):
         self.rating_post += 1
         self.save()
+        # after adding the reaction, update the rating of the author
+        self.author.update_rating()
 
     def dislike(self):
         self.rating_post -= 1
         self.save()
+        # after adding the reaction, update the rating of the author
+        self.author.update_rating()
 
     def preview(self):
         if len(self.content) > 124:
@@ -57,7 +73,7 @@ class PostCategory(models.Model):
 
 
 class Comment(models.Model):
-    post = models.ForeignKey(Post, on_delete=models.CASCADE)
+    post = models.ForeignKey(Post, on_delete=models.CASCADE, related_name='comments')
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     content = models.TextField()
     date_time_in = models.DateTimeField(auto_now_add=True)
@@ -66,7 +82,13 @@ class Comment(models.Model):
     def like(self):
         self.rating_comment += 1
         self.save()
+        # after adding the reaction, update the rating of the authors
+        Author.objects.get(user=self.user).update_rating()
+        self.post.author.update_rating()
 
     def dislike(self):
         self.rating_comment -= 1
         self.save()
+        # after adding the reaction, update the rating of the authors
+        Author.objects.get(user=self.user).update_rating()
+        self.post.author.update_rating()
