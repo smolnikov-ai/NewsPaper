@@ -1,0 +1,10 @@
+{% extends 'flatpages/default.html' %}
+
+{% block title %}
+    <h1 style="color:Navy;">{{ post.title }}</h1>
+{% endblock title %}
+
+{% block content %}
+    <h6 style="color:Maroon;">{{ post.date_time_in|date:'d.M.Y' }}</h6>
+    <h5 style="color:CadetBlue;">{{ post.content }}</h5>
+{% endblock content %}

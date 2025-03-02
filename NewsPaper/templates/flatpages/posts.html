@@ -1,0 +1,20 @@
+{% extends 'flatpages/default.html' %}
+
+{% block title %}
+    Всего {{ posts|length }} новостей
+{% endblock title %}
+
+{% block content %}
+    <h1>Все новости</h1>
+
+    {% if posts %}
+        {% for post in posts %}
+            <h3 style="color:Navy;">{{ post.title }}</h3>
+            <h6 style="color:Maroon;">{{ post.date_time_in|date:'d.M.Y' }}</h6>
+            <h5 style="color:CadetBlue;">{{ post.content|truncatewords:20 }}</h5>
+        {% endfor %}
+    {% else %}
+        <h2>Новостей нет</h2>
+    {% endif %}
+
+{% endblock content %}

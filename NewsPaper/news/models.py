@@ -21,7 +21,7 @@ class Author(models.Model):
 
     def update_rating(self):
         sum_rating_post_author_3 = Post.objects.filter(author=self). \
-                                       aggregate(rp=Coalesce(Sum('rating_post'), 0))['rp'] * 3
+            aggregate(rp=Coalesce(Sum('rating_post'), 0))['rp'] * 3
         sum_rating_comment_author = Comment.objects.filter(user=self.user). \
             aggregate(rca=Coalesce(Sum('rating_comment'), 0))['rca']
         sum_rating_comment_post_author = Comment.objects.filter(post__author=self). \
@@ -37,6 +37,9 @@ class Author(models.Model):
 
 class Category(models.Model):
     name = models.CharField(max_length=25, unique=True)
+
+    def __str__(self):
+        return self.name.title()
 
 
 class Post(models.Model):
@@ -65,6 +68,9 @@ class Post(models.Model):
             return self.content[:124] + '...'
         else:
             return self.content
+
+    def __str__(self):
+        return f'{self.title.title()}: {self.content[:124]}'
 
 
 class PostCategory(models.Model):
