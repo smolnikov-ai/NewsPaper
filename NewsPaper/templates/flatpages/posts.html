@@ -1,5 +1,7 @@
 {% extends 'flatpages/default.html' %}
 
+{% load custom_filters %}
+
 {% block title %}
     Всего {{ posts|length }} новостей
 {% endblock title %}
@@ -9,9 +11,9 @@
 
     {% if posts %}
         {% for post in posts %}
-            <h3 style="color:Navy;">{{ post.title }}</h3>
-            <h6 style="color:Maroon;">{{ post.date_time_in|date:'d.M.Y' }}</h6>
-            <h5 style="color:CadetBlue;">{{ post.content|truncatewords:20 }}</h5>
+            <h3 style="color:Navy;">{{ post.title|censor }}</h3>
+            <h6 style="color:Maroon;">{{ post.date_time_in|date:'d.F.Y' }}</h6>
+            <h5 style="color:CadetBlue;">{{ post.content|truncatechars:20|censor }}</h5>
         {% endfor %}
     {% else %}
         <h2>Новостей нет</h2>
