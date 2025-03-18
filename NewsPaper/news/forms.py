@@ -10,8 +10,18 @@ class PostForm(forms.ModelForm):
         model = Post
         fields = [
             'author',
-            'type',
             'categories',
             'title',
             'content',
         ]
+
+
+class NewsSearchForm(forms.Form):
+    title = forms.CharField(label='Название', required=False)
+    author = forms.CharField(label='Автор', required=False)
+    date_after = forms.DateField(label='Позже даты', required=False,
+                                 widget=forms.DateInput(attrs={'type': 'date'}))  # Указываем тип для HTML5
+
+    def clean_date_after(self):  # Если нужно, добавляем валидацию даты
+        date_after = self.cleaned_data.get('date_after')
+        return date_after

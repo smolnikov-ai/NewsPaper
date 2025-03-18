@@ -1,3 +1,5 @@
+import django_filters
+from django.forms import DateInput
 from django_filters import FilterSet, ModelChoiceFilter
 from .models import Post, Category, Author
 
@@ -17,11 +19,15 @@ class PostFilter(FilterSet):
         empty_label='Любая',
     )
 
+    date_time_in = django_filters.DateFilter(
+        widget=DateInput(attrs={'type': 'date', 'field': 'date_time'}),
+        lookup_expr='date__gte',
+        label='Даты выхода'
+    )
+
     class Meta:
         model = Post
         fields = {
             'content': ['iregex'],
-            'date_time_in': ['gt'],
-            'author': ['exact'],
-            # 'categories': ['exact'],
+            'type':['exact'],
         }
