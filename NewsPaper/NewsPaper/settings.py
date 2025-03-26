@@ -53,7 +53,7 @@ INSTALLED_APPS = [
 SITE_ID = 1
 
 LOGIN_URL = '/accounts/login/'
-LOGIN_REDIRECT_URL = '/news/'
+LOGIN_REDIRECT_URL = '/account/index/'
 LOGOUT_REDIRECT_URL = '/accounts/login/'
 
 ACCOUNT_EMAIL_REQUIRED = True
@@ -61,6 +61,8 @@ ACCOUNT_UNIQUE_EMAIL = True
 ACCOUNT_USERNAME_REQUIRED = False
 ACCOUNT_AUTHENTICATION_METHOD = 'email'
 ACCOUNT_EMAIL_VERIFICATION = 'none'
+
+ACCOUNT_FORMS = {'signup': 'accounts.forms.CommonSignupForm'}
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
