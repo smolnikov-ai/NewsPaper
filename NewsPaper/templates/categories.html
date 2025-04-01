@@ -1,0 +1,51 @@
+{% extends 'flatpages/default.html' %}
+
+{% load custom_filters %}
+{% load custom_tags %}
+
+{% block title %}
+    Новости категории {{ category }}, всего {{ categories|length }}
+
+{% endblock title %}
+
+{% block content %}
+
+            {% if is_not_subscriber %}
+                <button type="button">
+                  <a href="{% url 'category_subscribe' category.id %}">Подписаться на раздел {{ category }}
+                  </a>
+                </button>
+            {% endif %}
+
+    {% if categories %}
+        {% for post in categories %}
+            <h3 style="color:Navy;">{% for category in post.categories.all %}
+                <a href="{% url 'category_list' category.id %}">{{ category }}</a>{% if not forloop.last %}, {% endif %}
+            {% endfor %}</h3>
+            <h3 style="color:Navy;">{{ post.title|censor }}</h3>
+            <h6 style="color:Maroon;">{{ post.date_time_in|date:'d.F.Y' }}</h6>
+            <h5 style="color:CadetBlue;">{{ post.content|truncatechars:20|censor }}</h5>
+        {% endfor %}
+    {% else %}
+        <h2>Новостей нет</h2>
+    {% endif %}
+
+    {% if page_obj.has_previous %}
+        <a href="?{% url_replace page=1 %}">1</a>
+        {% if page_obj.previous_page_number != 1 %}
+            ...
+            <a href="?{% url_replace page=page_obj.previous_page_number %}">{{ page_obj.previous_page_number }}</a>
+        {% endif %}
+    {% endif %}
+
+    {{ page_obj.number }}
+
+    {% if page_obj.has_next %}
+        <a href="?{% url_replace page=page_obj.next_page_number %}">{{ page_obj.next_page_number }}</a>
+        {% if paginator.num_pages != page_obj.next_page_number %}
+        ...
+            <a href="?{% url_replace page=page_obj.paginator.num_pages %}">{{ page_obj.paginator.num_pages }}</a>
+        {% endif %}
+    {% endif %}
+
+{% endblock content %}
