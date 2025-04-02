@@ -100,7 +100,7 @@ class CategoryList(ListView):
     paginate_by = 10
 
     def get_queryset(self):
-        self.category = get_object_or_404(Category, id=self.kwargs['category_id'])
+        self.category = get_object_or_404(Category, id=self.kwargs['pk'])
         queryset = Post.objects.filter(categories=self.category).order_by('-date_time_in')
         return queryset
 
@@ -114,8 +114,8 @@ class CategoryList(ListView):
 
 # Представление для подписки User на Category
 @login_required
-def subscribe(request, category_id):
-    category = Category.objects.get(id=category_id)
+def subscribe(request, pk):
+    category = Category.objects.get(id=pk)
     user = request.user
     category.subscribers.add(user)
 

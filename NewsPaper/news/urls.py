@@ -13,6 +13,6 @@ urlpatterns = [
     path('articles/create/', PostCreate.as_view(), name='articles_create'),
     path('articles/<int:pk>/edit/', PostUpdate.as_view(), name='articles_edit'),
     path('articles/<int:pk>/delete/', PostDelete.as_view(), name='articles_delete'),
-    path('category/<int:category_id>/', CategoryList.as_view(), name='category_list'),
-    path('category/<int:category_id>/subscribe/', subscribe, name='category_subscribe'),
+    path('category/<int:pk>/', CategoryList.as_view(), name='category_list'),
+    path('category/<int:pk>/subscribe/', subscribe, name='category_subscribe'),
 ]
