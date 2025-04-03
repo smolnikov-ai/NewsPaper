@@ -5,7 +5,7 @@
     <title>Уведомление</title>
 </head>
 <body>
-    <h2>Здравствуй! Новые статьи за прошедшую неделю.</h2>
+    <h2>Здравствуй {{ username }}! Новые статьи за прошедшую неделю.</h2>
     <ul>
         {% for post in posts %}
             <li><a href="{{ link }}{{ post.get_absolute_url }}">{{ post.title }}</a></li>

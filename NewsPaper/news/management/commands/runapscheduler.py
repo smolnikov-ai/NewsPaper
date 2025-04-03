@@ -5,6 +5,7 @@ from django.conf import settings
 
 from apscheduler.schedulers.blocking import BlockingScheduler
 from apscheduler.triggers.cron import CronTrigger
+from django.contrib.auth.models import User
 from django.core.mail import EmailMultiAlternatives
 from django.core.management.base import BaseCommand
 from django.template.loader import render_to_string
@@ -22,25 +23,57 @@ def my_job():
     last_week = today - datetime.timedelta(days=7)
     posts = Post.objects.filter(date_time_in__gte=last_week)
     categories = set(posts.values_list('categories__name', flat=True))
-    subscribers = set(Category.objects.filter(name__in=categories).values_list('subscribers__email', flat=True))
 
-    html_content = render_to_string(
-        'daily_post.html',
-        {
-            'link': settings.SITE_URL,
-            'posts': posts,
-        }
-    )
+    # строка определения первичного ключа для рассылки отдельно каждому юзеру через цикл
+    subscribers_pk = set(Category.objects.filter(name__in=categories).values_list('subscribers__pk', flat=True))
 
-    msg = EmailMultiAlternatives(
-        subject='Статьи прошедшей недели',
-        body='',
-        from_email=settings.DEFAULT_FROM_EMAIL,
-        to=subscribers,
-    )
+    # рассылка сообщений циклом каждому username отдельно
+    for pk in subscribers_pk:
+        user = User.objects.get(id=pk)
 
-    msg.attach_alternative(html_content, 'text/html')
-    msg.send()
+        # создаем context для передачи в html шаблон
+        # в частности нужный нам username каждого пользователя, кому уходит письмо
+        html_content = render_to_string(
+            'daily_post.html',
+            {
+                'link': settings.SITE_URL,
+                'username': user.username,
+                'posts': posts,
+            }
+        )
+
+        msg = EmailMultiAlternatives(
+            subject='Статьи прошедшей недели',
+            body='',
+            from_email=settings.DEFAULT_FROM_EMAIL,
+            to=[user.email, ],
+        )
+
+        msg.attach_alternative(html_content, 'text/html')
+        msg.send()
+
+
+    # строка с почтами подписчиков для отправки сообщений списку пользователей
+    #subscribers = set(Category.objects.filter(name__in=categories).values_list('subscribers__email', flat=True))
+
+    # рассылка сообщений списку пользователей
+    # html_content = render_to_string(
+    #     'daily_post.html',
+    #     {
+    #         'link': settings.SITE_URL,
+    #         'username': user.username,
+    #         'posts': posts,
+    #     }
+    # )
+    # msg = EmailMultiAlternatives(
+    #     subject='Статьи прошедшей недели',
+    #     body='',
+    #     from_email=settings.DEFAULT_FROM_EMAIL,
+    #     to=subscribers,
+    # )
+
+    # msg.attach_alternative(html_content, 'text/html')
+    # msg.send()
 
 
 # функция, которая будет удалять неактуальные задачи
@@ -61,8 +94,9 @@ class Command(BaseCommand):
             my_job,
             # default запуск каждую минуту
             # trigger=CronTrigger(second="*/59"),
+            trigger=CronTrigger(second="*/10"),
             # запуск по дню недели и времени
-            trigger=CronTrigger(day_of_week='thu', hour='20', minute='34'),
+            #trigger=CronTrigger(day_of_week='thu', hour='20', minute='34'),
             # То же, что и интервал, но задача тригера таким образом более понятна django
             id="my_job",  # уникальный айди
             max_instances=1,
