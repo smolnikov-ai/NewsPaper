@@ -5,7 +5,7 @@
     <title>Уведомление</title>
 </head>
 <body>
-    <h2 style="color:CadetBlue;">Здравствуй! Новая <a href="{{ link }}">статья</a> в твоем любимом разделе!</h2>
+    <h2 style="color:CadetBlue;">Здравствуй {{ username }}! Новая <a href="{{ link }}">статья</a> в твоем любимом разделе!</h2>
         <p>{{ text|truncatechars:50 }}</p>
 </body>
 </html>
