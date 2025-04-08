@@ -1,3 +1,13 @@
+'''
+Performs the distribution of weekly messages, and messages at the event - the creation of a post.
+The file is being used 'news/signals.py' and a second Terminal for the command 'python manage.py runapscheduler'.
+Instead, a similar mailing list using Celery & Redis has been implemented.
+
+Выполняет рассылку еженедельных сообщений, и сообщений при событии - создание поста.
+Используется файл 'news/signals.py' и второй Terminal для команды 'python manage.py runapscheduler'.
+Взамен реализована аналогичная рассылка с применением Celery & Redis
+'''
+
 import datetime
 import logging
 
