@@ -2,13 +2,16 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMixin
 from django.shortcuts import render, get_object_or_404
 from django.urls import reverse_lazy
+from django.dispatch import receiver
+from django.db.models.signals import m2m_changed
 from django.views.generic import (ListView,
                                   DetailView, CreateView,
                                   UpdateView, DeleteView)
 
-from .forms import PostForm, NewsSearchForm
-from .models import Post, Category
 from .filters import PostFilter
+from .forms import PostForm, NewsSearchForm
+from .models import Post, Category, PostCategory
+from .tasks import send_notifications
 
 
 class PostsList(ListView):
@@ -122,3 +125,18 @@ def subscribe(request, pk):
     message = 'Вы подписались на рассылку постов категории '
 
     return render(request, 'category_subscribe.html', {'category': category, 'message': message})
+
+# при событии m2m_changed (поле ManyToManyField модели Post) присваивания Post какой-либо Category
+@receiver(m2m_changed, sender=PostCategory)
+def notify_about_new_post(sender, instance, **kwargs):
+    # функция срабатывает только если присваивание Category происходит при создании Post
+    if kwargs['action'] == 'post_add':
+        # составляем список подписчиков на данную Category
+        categories = instance.categories.all()
+        subscribers = []
+
+        for cat in categories:
+            subscribers += cat.subscribers.all()
+
+        # вызываем задачу send_notifications из news/tasks.py
+        send_notifications(instance.preview(), instance.pk, instance.title, set(subscribers))

@@ -1,6 +1,10 @@
 import os
 from celery import Celery
 
+# Для запуска Celery на Windows используем команду
+# celery -A NewsPaper worker -l INFO --pool=solo
+# из ~\projects\git\news_portal\NewsPaper
+
 
 # Связываем настройки Django с настройками Celery через переменную окружения
 os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'NewsPaper.settings')

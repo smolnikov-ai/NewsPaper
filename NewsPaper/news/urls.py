@@ -1,7 +1,7 @@
 from django.urls import path
 from .views import (PostsList, PostDetail, PostCreate, PostUpdate,
                     PostDelete, CategoryList, news_search,
-                    subscribe)
+                    subscribe,)
 
 urlpatterns = [
     path('news/', PostsList.as_view(), name='post_list'),
