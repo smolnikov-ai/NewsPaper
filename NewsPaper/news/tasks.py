@@ -49,6 +49,7 @@ def send_out_weekly():
 
     for pk in subscribers:
         s = User.objects.get(pk=pk)
+        # cat = Category.objects.filter(subscribers=pk).values_list('name', flat=True)
         html_content = render_to_string(
             'daily_post.html',
             {

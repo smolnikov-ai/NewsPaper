@@ -22,8 +22,7 @@ app.config_from_object('django.conf:settings', namespace = 'CELERY')
 app.conf.beat_schedule = {
     'send_mail_with_posts_8am_monday': {
         'task': 'news.tasks.send_out_weekly',
-        'schedule': crontab(),
-        #'schedule': crontab(minute=0, hour=8, day_of_week='monday'),
+        'schedule': crontab(minute=0, hour=8, day_of_week='monday'),
     },
 }
 
