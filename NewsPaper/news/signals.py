@@ -1,10 +1,8 @@
 '''
-Performs the distribution of weekly messages, and messages at the event - the creation of a post.
-The application is being used 'management/commands/runapscheduler.py' and a second Terminal for the command 'python manage.py runapscheduler'.
+Performs the sending messages at the event - creation of a Post, to users subscribed in Category Post
 Instead, a similar mailing list using Celery & Redis has been implemented.
 
-Выполняет рассылку еженедельных сообщений, и сообщений при событии - создание поста.
-Используется приложение 'management/commands/runapscheduler.py' и второй Terminal для команды 'python manage.py runapscheduler'.
+Выполняет рассылку сообщений при событии - создание Post, пользователям подписанным на Category Post
 Взамен реализована аналогичная рассылка с применением Celery & Redis
 '''
 

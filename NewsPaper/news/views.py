@@ -11,7 +11,7 @@ from django.views.generic import (ListView,
 from .filters import PostFilter
 from .forms import PostForm, NewsSearchForm
 from .models import Post, Category, PostCategory
-from .tasks import send_notifications
+from .tasks import send_notifications_subscribers_categories, send_out_weekly
 
 
 class PostsList(ListView):
@@ -138,5 +138,6 @@ def notify_about_new_post(sender, instance, **kwargs):
         for cat in categories:
             subscribers += cat.subscribers.all()
 
-        # вызываем задачу send_notifications из news/tasks.py
-        send_notifications(instance.preview(), instance.pk, instance.title, set(subscribers))
+        # вызываем задачу send_notifications_subscribers_categories из news/tasks.py
+        send_notifications_subscribers_categories(instance.preview(), instance.pk, instance.title, set(subscribers))
+        send_out_weekly()
