@@ -44,16 +44,16 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'django.contrib.sites',
     'django.contrib.flatpages',
-    'fpages',
-    'news.apps.NewsConfig',
-    'accounts',
     'django_filters',
+    'django_apscheduler',
     'allauth',
     'allauth.account',
     'allauth.socialaccount',
     'allauth.socialaccount.providers.google',
     'allauth.socialaccount.providers.yandex',
-    'django_apscheduler',
+    'accounts',
+    'fpages',
+    'news.apps.NewsConfig',
 ]
 
 SITE_ID = 1
