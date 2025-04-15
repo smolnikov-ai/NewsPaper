@@ -1,39 +1,44 @@
 <!DOCTYPE html>
 <html lang="en">
-    <head>
-        <meta charset="utf-8" />
-        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
-        <meta name="description" content="" />
-        <meta name="author" content="" />
-        <title>News Portal - Start Page</title>
-        <!-- Favicon-->
-        <link rel="icon" type="image/x-icon" href="assets/favicon.ico" />
-        <!-- Core theme CSS (includes Bootstrap)-->
-        {% load static %}
-        <link href="{% static 'css/styles.css' %}" rel="stylesheet" />
-    </head>
-    <body>
-        <!-- Responsive navbar-->
-        <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-            <div class="container">
-                <a class="navbar-brand" href="#!">News Portal</a>
-                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation"><span class="navbar-toggler-icon"></span></button>
-                <div class="collapse navbar-collapse" id="navbarSupportedContent">
-                    <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
-                        <li class="nav-item"><a class="nav-link" href="/news/">All news</a></li>
-                        <li class="nav-item"><a class="nav-link" href="/news/search">Search</a></li>
-                        <li class="nav-item"><a class="nav-link" href="/news/create">NW Create</a></li>
-                        <li class="nav-item"><a class="nav-link" href="/articles/create">AR Create</a></li>
-                        <li class="nav-item"><a class="nav-link" href="/accounts/login">Login</a></li>
-                        <li class="nav-item"><a class="nav-link" href="/accounts/logout">Logout</a></li>
-                        <li class="nav-item"><a class="nav-link" href="/accounts/signup">Sign Up</a></li>
-                        <li class="nav-item"><a class="nav-link" href="/default/">Default</a></li>
-                        <li class="nav-item"><a class="nav-link" href="/admin/">Admin</a></li>
-                        <li class="nav-item"><a class="nav-link active" aria-current="page" href="#">Blog</a></li>
-                    </ul>
+    {% load cache %}
+        {% cache 99 head %}
+            <head>
+                <meta charset="utf-8" />
+                <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+                <meta name="description" content="" />
+                <meta name="author" content="" />
+                <title>News Portal - Start Page</title>
+                <!-- Favicon-->
+                <link rel="icon" type="image/x-icon" href="assets/favicon.ico" />
+                <!-- Core theme CSS (includes Bootstrap)-->
+                {% load static %}
+                <link href="{% static 'css/styles.css' %}" rel="stylesheet" />
+            </head>
+        {% endcache %}
+        <body>
+        {% cache 99 navbar %}
+            <!-- Responsive navbar-->
+            <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+                <div class="container">
+                    <a class="navbar-brand" href="#!">News Portal</a>
+                    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation"><span class="navbar-toggler-icon"></span></button>
+                    <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                        <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
+                            <li class="nav-item"><a class="nav-link" href="/news/">All news</a></li>
+                            <li class="nav-item"><a class="nav-link" href="/news/search">Search</a></li>
+                            <li class="nav-item"><a class="nav-link" href="/news/create">NW Create</a></li>
+                            <li class="nav-item"><a class="nav-link" href="/articles/create">AR Create</a></li>
+                            <li class="nav-item"><a class="nav-link" href="/accounts/login">Login</a></li>
+                            <li class="nav-item"><a class="nav-link" href="/accounts/logout">Logout</a></li>
+                            <li class="nav-item"><a class="nav-link" href="/accounts/signup">Sign Up</a></li>
+                            <li class="nav-item"><a class="nav-link" href="/default/">Default</a></li>
+                            <li class="nav-item"><a class="nav-link" href="/admin/">Admin</a></li>
+                            <li class="nav-item"><a class="nav-link active" aria-current="page" href="#">Blog</a></li>
+                        </ul>
+                    </div>
                 </div>
-            </div>
-        </nav>
+            </nav>
+        {% endcache %}
         <!-- Page content-->
         <div class="container mt-5">
             <div class="row">
@@ -63,38 +68,42 @@
                         </section>
                     </article>
                 </div>
-                <!-- Side widgets-->
-                <div class="col-lg-4">
-                    <!-- Categories widget-->
-                    <div class="card mb-4">
-                        <div class="card-header">Категории</div>
-                        <div class="card-body">
-                            <div class="row">
-                                <div class="col-sm-6">
-                                    <ul class="list-unstyled mb-0">
-                                        <li><a href="/category/1">Политика</a></li>
-                                        <li><a href="/category/2">Спорт</a></li>
-                                        <li><a href="/category/3">Погода</a></li>
-                                        <li><a href="/category/4">Музыка</a></li>
-                                    </ul>
-                                </div>
-                                <div class="col-sm-6">
-                                    <ul class="list-unstyled mb-0">
-                                        <li><a href="/category/5">Россия</a></li>
-                                        <li><a href="/category/6">Популярное</a></li>
-                                        <li><a href="/category/7">Знаменитости</a></li>
-                                        <li><a href="#!">Свежие</a></li>
-                                    </ul>
+                {% cache 99 widgets %}
+                    <!-- Side widgets-->
+                    <div class="col-lg-4">
+                        <!-- Categories widget-->
+                        <div class="card mb-4">
+                            <div class="card-header">Категории</div>
+                            <div class="card-body">
+                                <div class="row">
+                                    <div class="col-sm-6">
+                                        <ul class="list-unstyled mb-0">
+                                            <li><a href="/category/1">Политика</a></li>
+                                            <li><a href="/category/2">Спорт</a></li>
+                                            <li><a href="/category/3">Погода</a></li>
+                                            <li><a href="/category/4">Музыка</a></li>
+                                        </ul>
+                                    </div>
+                                    <div class="col-sm-6">
+                                        <ul class="list-unstyled mb-0">
+                                            <li><a href="/category/5">Россия</a></li>
+                                            <li><a href="/category/6">Популярное</a></li>
+                                            <li><a href="/category/7">Знаменитости</a></li>
+                                            <li><a href="#!">Свежие</a></li>
+                                        </ul>
+                                    </div>
                                 </div>
                             </div>
                         </div>
                     </div>
-                </div>
+                {% endcache %}
             </div>
         </div>
-        <!-- Footer-->
-        <footer class="py-5 bg-dark">
-            <div class="container"><p class="m-0 text-center text-white">Copyright &copy; smolnikov-ai 2025</p></div>
-        </footer>
+        {% cache 99 footer %}
+            <!-- Footer-->
+            <footer class="py-5 bg-dark">
+                <div class="container"><p class="m-0 text-center text-white">Copyright &copy; smolnikov-ai 2025</p></div>
+            </footer>
+        {% endcache %}
     </body>
 </html>
