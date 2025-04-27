@@ -47,6 +47,7 @@ cat_4 = Category.objects.create(name='Музыка')
 cat_5 = Category.objects.create(name='Россия')
 cat_6 = Category.objects.create(name='Популярное')
 cat_7 = Category.objects.create(name='Знаменитости')
+cat_8 = Category.objects.create(name='Свежие')
 
 3.1 Присвоить в переменную уже имеющеюся Category
 
