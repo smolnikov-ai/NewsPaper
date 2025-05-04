@@ -46,8 +46,10 @@ def send_out_weekly():
     # определяем список объектов модели User соответствующих categories, через связь ManyToMany
     # так как повторы нам не нужны, оборачиваем в множество - set()
     subscribers = set(Category.objects.filter(name__in=categories).values_list('subscribers', flat=True))
-
-    for pk in subscribers:
+    # если на категорию не будет подписчика, то будет выскакивать ошибка, и Post не будет отнесен ни к какой категории
+    # поэтому исключаем из списка категории без подписчиков
+    subscribers_ids = set(filter(lambda x: x is not None, subscribers))
+    for pk in subscribers_ids:
         s = User.objects.get(pk=pk)
         # cat = Category.objects.filter(subscribers=pk).values_list('name', flat=True)
         html_content = render_to_string(

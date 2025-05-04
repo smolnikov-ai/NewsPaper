@@ -150,4 +150,5 @@ def notify_about_new_post(sender, instance, **kwargs):
 
         # вызываем задачу send_notifications_subscribers_categories из news/tasks.py
         send_notifications_subscribers_categories(instance.preview(), instance.pk, instance.title, set(subscribers))
+        # для проверки отправки сообщений так же вызываем задачу send_out_weekly из news/tasks.py
         send_out_weekly()
