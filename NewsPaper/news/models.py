@@ -3,6 +3,7 @@ from django.db import models
 from django.db.models import Sum
 from django.contrib.auth.models import User
 from django.db.models.functions import Coalesce
+from django.utils.translation import gettext as _
 from django.urls import reverse
 
 from .resources import POST_TYPES
@@ -38,7 +39,7 @@ class Author(models.Model):
 
 
 class Category(models.Model):
-    name = models.CharField(max_length=25, unique=True)
+    name = models.CharField(max_length=25, unique=True, help_text=_('category name'), verbose_name=_('category'),)
     subscribers = models.ManyToManyField(User, through='UserCategory', related_name='categories')
 
     def __str__(self):
@@ -46,13 +47,15 @@ class Category(models.Model):
 
 
 class Post(models.Model):
-    author = models.ForeignKey(Author, on_delete=models.CASCADE)
-    type = models.CharField(choices=POST_TYPES, max_length=2, default='NW')
+    author = models.ForeignKey(Author, on_delete=models.CASCADE, help_text=_('author name'), verbose_name=_('author'),)
+    type = models.CharField(choices=POST_TYPES, max_length=2, default='NW',
+                            help_text=_('post type'), verbose_name=_('type'),)
     date_time_in = models.DateTimeField(auto_now_add=True)
-    categories = models.ManyToManyField(Category, through='PostCategory')
-    title = models.CharField(max_length=50)
-    content = models.TextField()
-    rating_post = models.IntegerField(default=0)
+    categories = models.ManyToManyField(Category, through='PostCategory', help_text=_('categories of post'),
+                                        verbose_name=_('categories'),)
+    title = models.CharField(max_length=50, help_text=_('post title'), verbose_name=_('title'),)
+    content = models.TextField(help_text=_('post content'), verbose_name=_('content'),)
+    rating_post = models.IntegerField(default=0, help_text=_('post rating'), verbose_name=_('rating'),)
 
     def like(self):
         self.rating_post += 1
