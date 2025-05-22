@@ -1,10 +1,11 @@
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMixin
 from django.core.cache import cache
-from django.shortcuts import render, get_object_or_404
+from django.shortcuts import render, get_object_or_404, redirect
 from django.urls import reverse_lazy
 from django.dispatch import receiver
 from django.db.models.signals import m2m_changed
+from django.views import View
 from django.views.generic import (ListView,
                                   DetailView, CreateView,
                                   UpdateView, DeleteView)
@@ -153,3 +154,12 @@ def notify_about_new_post(sender, instance, **kwargs):
         send_notifications_subscribers_categories(instance.preview(), instance.pk, instance.title, set(subscribers))
         # для проверки отправки сообщений так же вызываем задачу send_out_weekly из news/tasks.py
         send_out_weekly()
+
+# Класс-вью для обработки POST запросов для изменения часовой зоны пользователя
+class Timezone(View):
+    # метод вызывается каждый раз, когда приходит HTTP-запрос типа POST на соответствующую страницу
+    def post(self, request):
+        # Устанавливаем часовую зону из полученных данных формы
+        request.session['django_timezone'] = request.POST['timezone']
+        # Перенаправляем обратно на предыдущую страницу
+        return redirect(request.META['HTTP_REFERER'])

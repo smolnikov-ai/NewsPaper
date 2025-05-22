@@ -3,7 +3,7 @@ from django.views.decorators.cache import cache_page
 
 from .views import (PostsList, PostDetail, PostCreate, PostUpdate,
                     PostDelete, CategoryList, news_search,
-                    subscribe,)
+                    subscribe, Timezone, )
 
 urlpatterns = [
     path('news/', cache_page(60*1)(PostsList.as_view()), name='post_list'),
@@ -19,4 +19,7 @@ urlpatterns = [
     path('articles/<int:pk>/delete/', PostDelete.as_view(), name='articles_delete'),
     path('category/<int:pk>/', CategoryList.as_view(), name='category_list'),
     path('category/<int:pk>/subscribe/', subscribe, name='category_subscribe'),
+    # Используется для отображения временной зоны на странице
+    # в шаблонах ссылка вида {% url 'time_zone' %}
+    path('time_zone/', Timezone.as_view(), name='time_zone'),
 ]
