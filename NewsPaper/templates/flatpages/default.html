@@ -1,7 +1,7 @@
 {% load tz %} <!-- загружаем тег для работы с часовыми поясами -->
 <!DOCTYPE html>
 
-{% load i18n %}
+{% load i18n %} <!-- загружаем тег для перевода-->
 
 <html lang="en">
             <head>
@@ -38,7 +38,11 @@
                     </div>
                 </div>
             </nav>
-
+            <!-- Смена темы в зависимости от времени суток -->
+            <!-- Если сейчас между 19 вечера и 7 утра - темная тема, иначе - светлая -->
+            <!-- <style>
+                body {background-color: {% if current_timezone.hour >= 19 or current_timezone.hour <= 7 %} darkcyan {% else %} lime {% endif %};}
+            </style> -->
             <!-- Настройки формы выбора языка отображения страницы -->
             <form action="{% url 'set_language' %}" method="POST"> {% csrf_token %} <!-- Не забываем по csrf_token для POST запросов -->
                 <input type="hidden" name="next" value="{{ redirect_to }}">
